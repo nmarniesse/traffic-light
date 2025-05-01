@@ -131,10 +131,10 @@ const App = () => {
               checked={isModeBlink}
               onChange={() => setModeBlink((prev) => !prev)}
             />
-            {isModeBlink ? "Start clignoter" : "Stop clignoter"}
+            {isModeBlink ? "Start" : "Stop"}
           </Box>
           <Box sx={{ marginTop: "20px" }}>
-            Vitesse clignotement
+            Vitesse
             <Slider
               aria-label="Vitesse clignotement"
               min={0}
