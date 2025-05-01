@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { Box, Button, Container, Divider, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, Slider, Switch } from '@mui/material';
+import { Box, Button, Container, Divider, FormControlLabel, Grid, Radio, RadioGroup, Slider, Stack, Switch, Typography } from '@mui/material';
 import { Vertical } from './layout/Vertical';
 import { Horizontal } from './layout/Horizontal';
-
-const lights = ['green', 'yellow', 'red'];
-const defaultLightInterval = [3000, 1000, 3000];
-const defaultBlinkInterval = 500;
+import { defaultBlinkInterval, defaultLightInterval, lights } from './Config';
 
 const App = () => {
   const [layout, setLayout] = useState<'horizontal' | 'vertical'>('vertical');
@@ -18,14 +15,6 @@ const App = () => {
   const [isModeBlink, setModeBlink] = useState<boolean>(false);
   const [blinkStatus, setBlinkStatus] = useState<boolean>(true);
   const [speedFactorBlinkPourcent, setSpeedFactorBlinkPourcent] = useState<number>(5);
-
-  const handleStart = (value: boolean) => {
-    if (!value) {
-      setModeBlink(false);
-    }
-
-    setStarted(value);
-  };
 
   useEffect(() => {
     let interval = undefined;
@@ -51,6 +40,15 @@ const App = () => {
     return () => clearInterval(interval);
   }, [isModeBlink, speedFactorBlinkPourcent]);
 
+  const handleStartChange = (value: boolean) => {
+    if (!value) {
+      setModeBlink(false);
+      setBlinkStatus(true);
+    }
+
+    setStarted(value);
+  };
+
   return (
     <Container maxWidth="lg" sx={{paddingTop: '20px'}}>
       <Grid container spacing={2}>
@@ -64,17 +62,16 @@ const App = () => {
         </Grid>
         <Grid size={4}>
           <Box>
-            <Button variant="contained" color={isStarted ? 'error' : 'success'} onClick={() => handleStart(!isStarted)}>
-                {isStarted ? 'Stop' : 'Start'}
-            </Button>
+            <Typography variant="h5" gutterBottom>Défilement des feux</Typography>
+            <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
+              <Button variant="contained" color={isStarted ? 'error' : 'success'} onClick={() => handleStartChange(!isStarted)}>
+                  {isStarted ? 'Stop' : 'Start'}
+              </Button>
+              <Button disabled={isStarted} variant="contained" onClick={() => setLightIndex((lightIndex + 1) % lights.length)}>
+                Change
+              </Button>
+            </Stack>
           </Box>
-          <Box sx={{marginTop: '20px'}}>
-            <Button disabled={isStarted} variant="contained" onClick={() => setLightIndex((lightIndex + 1) % lights.length)}>
-              Change
-            </Button>
-          </Box>
-
-          <Divider sx={{marginTop: '20px'}}/>
           <Box sx={{marginTop: '20px'}}>
             Vitesse 
             <Slider 
@@ -89,8 +86,9 @@ const App = () => {
 
           <Divider sx={{marginTop: '20px'}}/>
           <Box sx={{marginTop: '20px'}}>
-            <Switch disabled={!isStarted} checked={isModeBlink} onChange={() => setModeBlink(prev => !prev)} />
-            {isModeBlink ? 'Clignote' : 'Fixe'}
+            <Typography variant="h5" gutterBottom>Clignotement</Typography>
+            <Switch checked={isModeBlink} onChange={() => setModeBlink(prev => !prev)} />
+            {isModeBlink ? 'Start clignoter' : 'Stop clignoter'}
           </Box>
           <Box sx={{marginTop: '20px'}}>
             Vitesse clignotement
@@ -106,7 +104,7 @@ const App = () => {
 
           <Divider sx={{marginTop: '20px'}}/>
           <Box sx={{marginTop: '20px'}}>
-            <FormLabel id="demo-radio-buttons-group-label">Orientation</FormLabel>
+            <Typography variant="h5" gutterBottom>Orientation</Typography>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
               value={layout}

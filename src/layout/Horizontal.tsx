@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { glowIntensity } from '../Config';
 
 type HorizontalProps = {
   isRedOn: boolean;
@@ -9,10 +10,23 @@ type HorizontalProps = {
 const Horizontal: FC<HorizontalProps> = ({isGreenOn, isYellowOn, isRedOn}) => {
   return (
     <svg width="80%" height="120" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="20" width="260" height="80" rx="20" ry="20" fill="#333" stroke="#000" stroke-width="4"/>
-      <circle cx="70" cy="60" r="25" fill={isRedOn ? 'red' : 'grey'} stroke="#000" stroke-width="2"/>
-      <circle cx="150" cy="60" r="25" fill={isYellowOn ? 'yellow' : 'grey'} stroke="#000" stroke-width="2"/>
-      <circle cx="230" cy="60" r="25" fill={isGreenOn ? 'green' : 'grey'} stroke="#000" stroke-width="2"/>
+        <defs>
+            <filter id="red-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="0" stdDeviation={glowIntensity} flood-color="red"/>
+            </filter>
+
+            <filter id="yellow-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="0" stdDeviation={glowIntensity} flood-color="yellow"/>
+            </filter>
+
+            <filter id="green-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="0" stdDeviation={glowIntensity} flood-color="lime"/>
+            </filter>
+        </defs>
+      <rect x="0" y="20" width="300" height="80" rx="20" ry="20" fill="#333" stroke="#000" stroke-width="4"/>
+      <circle cx="60" cy="60" r="25" fill={isRedOn ? 'red' : 'grey'} stroke="#000" stroke-width="2" filter={isRedOn ? "url(#red-glow)" : undefined}/>
+      <circle cx="150" cy="60" r="25" fill={isYellowOn ? 'yellow' : 'grey'} stroke="#000" stroke-width="2" filter={isYellowOn ? "url(#yellow-glow)" : undefined}/>
+      <circle cx="240" cy="60" r="25" fill={isGreenOn ? 'green' : 'grey'} stroke="#000" stroke-width="2" filter={isGreenOn ? "url(#green-glow)" : undefined}/>
     </svg>
   );
 };
