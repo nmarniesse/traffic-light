@@ -16,13 +16,18 @@ import {
 } from "@mui/material";
 import { Vertical } from "./layout/Vertical";
 import { Horizontal } from "./layout/Horizontal";
-import { defaultBlinkInterval, defaultLightInterval, lights } from "./Config";
-
-type Layout = "horizontal" | "vertical";
+import {
+  defaultBlinkInterval,
+  defaultLightInterval,
+  Layout,
+  LightColor,
+} from "./Config";
 
 const App = () => {
   const [layout, setLayout] = useState<Layout>("vertical");
-  const [lightIndex, setLightIndex] = useState<number>(0);
+  const [lightPosition, setLightPosition] = useState<LightColor>(
+    LightColor.Green,
+  );
 
   const [isStarted, setStarted] = useState<boolean>(false);
   const [speedFactorPourcent, setSpeedFactorPourcent] = useState<number>(5);
@@ -32,18 +37,20 @@ const App = () => {
   const [speedFactorBlinkPourcent, setSpeedFactorBlinkPourcent] =
     useState<number>(5);
 
+  const incrementLightPosition = useCallback(() => {
+    setLightPosition((prev) => (prev + 1) % 3);
+  }, []);
+
   useEffect(() => {
     let interval = undefined;
     if (isStarted) {
       const timeout =
-        (defaultLightInterval[lightIndex] * (11 - speedFactorPourcent)) / 10;
-      interval = setInterval(() => {
-        setLightIndex((lightIndex + 1) % lights.length);
-      }, timeout);
+        (defaultLightInterval[lightPosition] * (11 - speedFactorPourcent)) / 10;
+      interval = setInterval(incrementLightPosition, timeout);
     }
 
     return () => clearInterval(interval);
-  }, [isStarted, lightIndex, speedFactorPourcent]);
+  }, [isStarted, lightPosition, speedFactorPourcent, incrementLightPosition]);
 
   useEffect(() => {
     let interval = undefined;
@@ -74,6 +81,18 @@ const App = () => {
     setModeBlink((prev) => !prev);
   }, [isModeBlink]);
 
+  const handleGreenLightClick = useCallback(() => {
+    setLightPosition(LightColor.Green);
+  }, []);
+
+  const handleYellowLightClick = useCallback(() => {
+    setLightPosition(LightColor.Yellow);
+  }, []);
+
+  const handleRedLightClick = useCallback(() => {
+    setLightPosition(LightColor.Red);
+  }, []);
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "20px" }}>
       <Grid container spacing={2}>
@@ -83,16 +102,19 @@ const App = () => {
         >
           {layout === "vertical" && (
             <Vertical
-              isRedOn={lightIndex === 2 && blinkStatus}
-              isYellowOn={lightIndex === 1 && blinkStatus}
-              isGreenOn={lightIndex === 0 && blinkStatus}
+              isRedOn={lightPosition === 2 && blinkStatus}
+              isYellowOn={lightPosition === 1 && blinkStatus}
+              isGreenOn={lightPosition === 0 && blinkStatus}
+              onRedLightClick={handleRedLightClick}
+              onYellowLightClick={handleYellowLightClick}
+              onGreenLightClick={handleGreenLightClick}
             />
           )}
           {layout === "horizontal" && (
             <Horizontal
-              isRedOn={lightIndex === 2 && blinkStatus}
-              isYellowOn={lightIndex === 1 && blinkStatus}
-              isGreenOn={lightIndex === 0 && blinkStatus}
+              isRedOn={lightPosition === 2 && blinkStatus}
+              isYellowOn={lightPosition === 1 && blinkStatus}
+              isGreenOn={lightPosition === 0 && blinkStatus}
             />
           )}
         </Grid>
@@ -116,7 +138,7 @@ const App = () => {
               <Button
                 disabled={isStarted}
                 variant="contained"
-                onClick={() => setLightIndex((lightIndex + 1) % lights.length)}
+                onClick={incrementLightPosition}
               >
                 Change
               </Button>

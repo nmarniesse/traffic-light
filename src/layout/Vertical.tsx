@@ -5,9 +5,19 @@ type VerticalProps = {
   isRedOn: boolean;
   isYellowOn: boolean;
   isGreenOn: boolean;
+  onGreenLightClick?: () => void;
+  onYellowLightClick?: () => void;
+  onRedLightClick?: () => void;
 };
 
-const Vertical: FC<VerticalProps> = ({ isGreenOn, isYellowOn, isRedOn }) => {
+const Vertical: FC<VerticalProps> = ({
+  isGreenOn,
+  isYellowOn,
+  isRedOn,
+  onGreenLightClick,
+  onYellowLightClick,
+  onRedLightClick,
+}) => {
   return (
     <svg
       width="100%"
@@ -62,6 +72,8 @@ const Vertical: FC<VerticalProps> = ({ isGreenOn, isYellowOn, isRedOn }) => {
         stroke="#000"
         stroke-width="2"
         filter={isRedOn ? "url(#red-glow)" : undefined}
+        onClick={onRedLightClick}
+        style={{ cursor: "pointer" }}
       />
       <circle
         cx="60"
@@ -71,6 +83,8 @@ const Vertical: FC<VerticalProps> = ({ isGreenOn, isYellowOn, isRedOn }) => {
         stroke="#000"
         stroke-width="2"
         filter={isYellowOn ? "url(#yellow-glow)" : undefined}
+        onClick={onYellowLightClick}
+        style={{ cursor: "pointer" }}
       />
       <circle
         cx="60"
@@ -80,6 +94,8 @@ const Vertical: FC<VerticalProps> = ({ isGreenOn, isYellowOn, isRedOn }) => {
         stroke="#000"
         stroke-width="2"
         filter={isGreenOn ? "url(#green-glow)" : undefined}
+        onClick={onGreenLightClick}
+        style={{ cursor: "pointer" }}
       />
     </svg>
   );
