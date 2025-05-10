@@ -10,7 +10,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import { useControl } from "./contexts";
+import { useControl } from "../contexts";
 
 const Filters = () => {
   const {
