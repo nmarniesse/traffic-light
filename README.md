@@ -3,6 +3,10 @@
 Web app to play with a traffic light.
 Why? Because I have kids :smile:
 
+
+This small project is written in React & Typsescript and uses Material UI.
+It's deployed on github.io automatically when pushed on master:
+
 [https://nmarniesse.github.io/traffic-light/](https://nmarniesse.github.io/traffic-light/)
 
 ## Requirements
