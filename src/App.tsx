@@ -18,8 +18,10 @@ import { Vertical } from "./layout/Vertical";
 import { Horizontal } from "./layout/Horizontal";
 import { defaultBlinkInterval, defaultLightInterval, lights } from "./Config";
 
+type Layout = "horizontal" | "vertical";
+
 const App = () => {
-  const [layout, setLayout] = useState<"horizontal" | "vertical">("vertical");
+  const [layout, setLayout] = useState<Layout>("vertical");
   const [lightIndex, setLightIndex] = useState<number>(0);
 
   const [isStarted, setStarted] = useState<boolean>(false);
@@ -68,7 +70,10 @@ const App = () => {
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "20px" }}>
       <Grid container spacing={2}>
-        <Grid size={8} sx={{ textAlign: "center" }}>
+        <Grid
+          size={layout === "horizontal" ? 12 : 6}
+          sx={{ textAlign: "center" }}
+        >
           {layout === "vertical" && (
             <Vertical
               isRedOn={lightIndex === 2 && blinkStatus}
@@ -84,7 +89,7 @@ const App = () => {
             />
           )}
         </Grid>
-        <Grid size={4}>
+        <Grid size={layout === "horizontal" ? 12 : 6}>
           <Box>
             <Typography variant="h5" gutterBottom>
               Défilement des feux

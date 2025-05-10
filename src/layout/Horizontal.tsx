@@ -14,8 +14,8 @@ const Horizontal: FC<HorizontalProps> = ({
 }) => {
   return (
     <svg
-      width="80%"
-      height="120"
+      width="100%"
+      height="240"
       viewBox="0 0 300 120"
       xmlns="http://www.w3.org/2000/svg"
     >

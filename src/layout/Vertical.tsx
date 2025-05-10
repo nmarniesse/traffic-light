@@ -10,7 +10,7 @@ type VerticalProps = {
 const Vertical: FC<VerticalProps> = ({ isGreenOn, isYellowOn, isRedOn }) => {
   return (
     <svg
-      width="360"
+      width="100%"
       height="80%"
       viewBox="0 0 120 300"
       xmlns="http://www.w3.org/2000/svg"
