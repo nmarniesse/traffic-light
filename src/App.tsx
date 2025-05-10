@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import {
   Box,
@@ -58,14 +58,21 @@ const App = () => {
     return () => clearInterval(interval);
   }, [isModeBlink, speedFactorBlinkPourcent]);
 
-  const handleStartChange = (value: boolean) => {
+  const handleStartChange = useCallback((value: boolean) => {
     if (!value) {
       setModeBlink(false);
       setBlinkStatus(true);
     }
 
     setStarted(value);
-  };
+  }, []);
+
+  const handleChangeModeBlink = useCallback(() => {
+    if (isModeBlink) {
+      setBlinkStatus(true);
+    }
+    setModeBlink((prev) => !prev);
+  }, [isModeBlink]);
 
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "20px" }}>
@@ -132,10 +139,7 @@ const App = () => {
             <Typography variant="h5" gutterBottom>
               Clignotement
             </Typography>
-            <Switch
-              checked={isModeBlink}
-              onChange={() => setModeBlink((prev) => !prev)}
-            />
+            <Switch checked={isModeBlink} onChange={handleChangeModeBlink} />
             {isModeBlink ? "Start" : "Stop"}
           </Box>
           <Box sx={{ marginTop: "20px" }}>
