@@ -9,6 +9,7 @@ import {
 import {
   defaultBlinkInterval,
   defaultLightInterval,
+  Layout,
   LightColor,
 } from "../Config";
 
@@ -49,7 +50,7 @@ const ControlProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    let interval = undefined;
     if (isStarted) {
       const timeout =
         (defaultLightInterval[lightPosition] * (11 - speedFactorPourcent)) / 10;
@@ -60,7 +61,7 @@ const ControlProvider = ({ children }: { children: ReactNode }) => {
   }, [isStarted, lightPosition, speedFactorPourcent, incrementLightPosition]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    let interval = undefined;
     if (isModeBlink) {
       const timeout =
         (defaultBlinkInterval * (11 - speedFactorBlinkPourcent)) / 10;
