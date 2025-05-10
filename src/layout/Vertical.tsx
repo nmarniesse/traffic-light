@@ -1,23 +1,26 @@
-import { FC } from "react";
-import { glowIntensity } from "../Config";
+import { FC, useCallback } from "react";
+import { glowIntensity, LightColor } from "../Config";
+import { useControl } from "../contexts";
 
-type VerticalProps = {
-  isRedOn: boolean;
-  isYellowOn: boolean;
-  isGreenOn: boolean;
-  onGreenLightClick?: () => void;
-  onYellowLightClick?: () => void;
-  onRedLightClick?: () => void;
-};
+const Vertical: FC = () => {
+  const { lightPosition, setLightPosition, blinkStatus } = useControl();
 
-const Vertical: FC<VerticalProps> = ({
-  isGreenOn,
-  isYellowOn,
-  isRedOn,
-  onGreenLightClick,
-  onYellowLightClick,
-  onRedLightClick,
-}) => {
+  const isRedOn = lightPosition === LightColor.Red && blinkStatus;
+  const isYellowOn = lightPosition === LightColor.Yellow && blinkStatus;
+  const isGreenOn = lightPosition === LightColor.Green && blinkStatus;
+
+  const handleGreenLightClick = useCallback(() => {
+    setLightPosition(LightColor.Green);
+  }, []);
+
+  const handleYellowLightClick = useCallback(() => {
+    setLightPosition(LightColor.Yellow);
+  }, []);
+
+  const handleRedLightClick = useCallback(() => {
+    setLightPosition(LightColor.Red);
+  }, []);
+
   return (
     <svg
       width="100%"
@@ -72,7 +75,7 @@ const Vertical: FC<VerticalProps> = ({
         stroke="#000"
         stroke-width="2"
         filter={isRedOn ? "url(#red-glow)" : undefined}
-        onClick={onRedLightClick}
+        onClick={handleRedLightClick}
         style={{ cursor: "pointer" }}
       />
       <circle
@@ -83,7 +86,7 @@ const Vertical: FC<VerticalProps> = ({
         stroke="#000"
         stroke-width="2"
         filter={isYellowOn ? "url(#yellow-glow)" : undefined}
-        onClick={onYellowLightClick}
+        onClick={handleYellowLightClick}
         style={{ cursor: "pointer" }}
       />
       <circle
@@ -94,7 +97,7 @@ const Vertical: FC<VerticalProps> = ({
         stroke="#000"
         stroke-width="2"
         filter={isGreenOn ? "url(#green-glow)" : undefined}
-        onClick={onGreenLightClick}
+        onClick={handleGreenLightClick}
         style={{ cursor: "pointer" }}
       />
     </svg>

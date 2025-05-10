@@ -1,17 +1,26 @@
-import { FC } from "react";
-import { glowIntensity } from "../Config";
+import { FC, useCallback } from "react";
+import { glowIntensity, LightColor } from "../Config";
+import { useControl } from "../contexts";
 
-type HorizontalProps = {
-  isRedOn: boolean;
-  isYellowOn: boolean;
-  isGreenOn: boolean;
-};
+const Horizontal: FC = () => {
+  const { lightPosition, setLightPosition, blinkStatus } = useControl();
 
-const Horizontal: FC<HorizontalProps> = ({
-  isGreenOn,
-  isYellowOn,
-  isRedOn,
-}) => {
+  const isRedOn = lightPosition === LightColor.Red && blinkStatus;
+  const isYellowOn = lightPosition === LightColor.Yellow && blinkStatus;
+  const isGreenOn = lightPosition === LightColor.Green && blinkStatus;
+
+  const handleGreenLightClick = useCallback(() => {
+    setLightPosition(LightColor.Green);
+  }, []);
+
+  const handleYellowLightClick = useCallback(() => {
+    setLightPosition(LightColor.Yellow);
+  }, []);
+
+  const handleRedLightClick = useCallback(() => {
+    setLightPosition(LightColor.Red);
+  }, []);
+
   return (
     <svg
       width="100%"
@@ -66,6 +75,8 @@ const Horizontal: FC<HorizontalProps> = ({
         stroke="#000"
         stroke-width="2"
         filter={isRedOn ? "url(#red-glow)" : undefined}
+        onClick={handleRedLightClick}
+        style={{ cursor: "pointer" }}
       />
       <circle
         cx="150"
@@ -75,6 +86,8 @@ const Horizontal: FC<HorizontalProps> = ({
         stroke="#000"
         stroke-width="2"
         filter={isYellowOn ? "url(#yellow-glow)" : undefined}
+        onClick={handleYellowLightClick}
+        style={{ cursor: "pointer" }}
       />
       <circle
         cx="240"
@@ -84,6 +97,8 @@ const Horizontal: FC<HorizontalProps> = ({
         stroke="#000"
         stroke-width="2"
         filter={isGreenOn ? "url(#green-glow)" : undefined}
+        onClick={handleGreenLightClick}
+        style={{ cursor: "pointer" }}
       />
     </svg>
   );
